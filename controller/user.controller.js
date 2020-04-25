@@ -4,7 +4,7 @@ const _ = require('lodash');
 const User = mongoose.model('User');
 const userController = {}
 
-userController.createUser = function (req, res, next) {
+userController.createUser = function (req, res) {
     console.log(req.body);
     var user = new User();
     user.fullName = req.body.fullName;
@@ -16,9 +16,9 @@ userController.createUser = function (req, res, next) {
             res.status(200).send({status:200, msg:'User Creation Succesful kindly Proceed to LogIn'});
         else {
             if (err.code == 11000)
-                res.status(422).send(['Duplicate email adrress found.']);
+                res.status(422).send({status:422, msg:'Duplicate email adrress found.'});
             else
-                return next(err);
+                res.status(400).send({status:400, msg: err});
         }
     });
 }
